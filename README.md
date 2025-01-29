@@ -1,4 +1,4 @@
-Pour réaliser ce test, cela m'a prit environs ~30-40min, en ayant pris le temps d'analiser chaque fichiers déjà existants, être certains de répondre correctement à chaque demande, et de vérifier qu'il n'y ai pas de piège. Mais sinon les changements demandés ne demanderaient pas plus de 10 minutes.
+Pour réaliser ce test, cela m'a pris environs ~30-40min, en ayant pris le temps d'analyser chaque fichier déjà existants, être certain de répondre correctement à chaque demande, et de vérifier qu'il n'y ait pas de piège. Mais les changements demandés ne prendraient pas plus de 10 minutes.
 
 
 # RÉPONSES AUX QUESTIONS
