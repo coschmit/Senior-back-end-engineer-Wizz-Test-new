@@ -104,6 +104,45 @@ app.post('/api/games/search', (req, res) => {
     });
 });
 
+app.post('/api/games/populate', async (req, res) => {
+  console.log('lets populate');
+  const urls = [
+    'https://interview-marketing-eng-dev.s3.eu-west-1.amazonaws.com/android.top100.json',
+    'https://interview-marketing-eng-dev.s3.eu-west-1.amazonaws.com/ios.top100.json',
+  ];
+
+  try {
+    const gameData = [];
+
+    const fetchPromises = urls.map(async (url) => {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    });
+
+    const results = await Promise.all(fetchPromises);
+    results.forEach((data) => gameData.push(...data.flat()));
+    console.log('gameData', gameData[0].os, gameData[0].name);
+
+    await db.Game.bulkCreate(
+      gameData.map((game) => ({
+        publisherId: game.publisher_id,
+        name: game.name,
+        platform: game.os,
+        storeId: game.app_id,
+        bundleId: game.bundle_id,
+        appVersion: game.version,
+        isPublished: !!game.release_date,
+      })),
+    );
+
+    res.send({ message: 'Database populated successfully' });
+  } catch (err) {
+    console.log('***Error populating database', JSON.stringify(err));
+    res.status(500).send(err);
+  }
+});
+
 app.listen(3000, () => {
   console.log('Server is up on port 3000');
 });
