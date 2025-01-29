@@ -1,3 +1,38 @@
+Pour réaliser ce test, cela m'a prit environs ~30-40min, en ayant pris le temps d'analiser chaque fichiers déjà existants, être certains de répondre correctement à chaque demande, et de vérifier qu'il n'y ai pas de piège. Mais sinon les changements demandés ne demanderaient pas plus de 10 minutes.
+
+
+# RÉPONSES AUX QUESTIONS
+
+### QUESTION 1
+Pour rendre ce projet prêt pour la production, il y a quelques points majeurs sur lesquels travailler :
+1. Optimisation des performances : Implémenter la pagination pour gérer les grandes quantités de données et optimiser les requêtes SQL. Utiliser des techniques de lazy loading et de caching pour améliorer les temps de chargement. À récupérer autant de données on risque de faire crash le server et le client
+2. Sécurité : Valider les entrées utilisateurs pour éviter les attaques. Bloquer les accès publics aux endpoints surtout aux plus sensibles comme populate par exemple, pour éviter tout accès non autorisé.
+3. Tests : Ajouter des tests unitaires dédier à ces nouveaux endpoints, tout comme d'intégration et de régression pour garantir la stabilité.
+4. Architecture/Scalabilité : Préparer l’application à la montée en charge en adoptant une architecture distribuée et surveiller les ressources. Faire des tests de charge pour identifier les points faibles.
+5. Gestion des erreurs et des logs et mise en place d'alertes : Utiliser des outils de surveillance des erreurs (comme Sentry ou Axiom) et des logs centralisés pour diagnostiquer rapidement les problèmes en production, et ajouter des alertes pour permettre de détecter rapidement toute anomalie de performance. Utilisant cloud run tout cela ne devrait être un soucis :)
+7. Backup et récupération : Implémenter des sauvegardes régulières et un système de récupération.
+
+Et je pense que ce sera déjà un bon début !
+
+### QUESTION 2
+J'ai déjà eu l'occasion de travailler sur un système similaire où nous devions ingérer chaque jour une quantité phénoménale de fichiers déposés sur un bucket AWS. Chaque fichier devait être parsé, validé, puis traité par batch. Pour cela, j'ai utilisé AWS Lambda pour exécuter une partie du code de manière parallèle et optimiser les performances. Une fois le fichier reçu et traité, la fonction Lambda faisait appel à notre API pour orchestrer le traitement des données via des tâches Cloud Tasks, qui permettaient de gérer l'exécution asynchrone en grande quantité et le scheduling de certains processus.
+
+AWS Lambda gère automatiquement les réessais en cas d’échec, avec une logique de retry automatique, ce qui garantit la résilience du système sans nécessiter d'intervention manuelle. De plus, en cas de besoin, nous avons utilisé un scheduler pour planifier les processus récurrents, assurant ainsi une ingestion régulière et fluide des fichiers dans le système.
+
+Dans le cas de Voodoo, qui utilise Cloud Run, mais avec des fichiers stockés sur AWS S3, je proposerais d'utiliser AWS Lambda pour automatiser le traitement des fichiers. Dès qu'un fichier est ajouté à S3, une fonction Lambda pourrait être déclenchée pour traiter ce fichier et appeler l'API de population.
+Un peu de la même manière que dans mon exemple cité précédemment.
+
+
+
+-------------
+
+
+
+
+
+
+
+
 # Candidate Takehome Exercise
 This is a simple backend engineer take-home test to help assess candidate skills and practices.  We appreciate your interest in Voodoo and have created this exercise as a tool to learn more about how you practice your craft in a realistic environment.  This is a test of your coding ability, but more importantly it is also a test of your overall practices.
 
